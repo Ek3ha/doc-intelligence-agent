@@ -9,33 +9,30 @@ def get_llm():
 
 # ── Tools ────────────────────────────────────────────────────────────────────
 def retrieve_context(query: str, vector_db, k: int = 3) -> str:
-    print("-----------I AM HERE----------")
     results = vector_db.similarity_search(query, k=k)
     return "\n\n".join([r.page_content for r in results])
 
 
 def process_document(text: str, task: str, llm) -> str:
-    return "HI"
-#     response = llm.invoke(f"""Perform the following task on the given text.
+    response = llm.invoke(f"""Perform the following task on the given text.
 
-# Task: {task}
+Task: {task}
 
-# Text:
-# {text}
-# """)
-#     return response.content
+Text:
+{text}
+""")
+    return response.content
 
 
 def analyze_csv(df, query: str, llm) -> str:
-#     response = llm.invoke(f"""You are a data analyst. Answer the question based strictly on the data.
+    response = llm.invoke(f"""You are a data analyst. Answer the question based strictly on the data.
 
-# Data:
-# {df.to_string(max_rows=50)}
+Data:
+{df.to_string(max_rows=50)}
 
-# Question: {query}
-# """)
-#     return response.content
-    return "Hello"
+Question: {query}
+""")
+    return response.content
 
 
 # ── Agent ────────────────────────────────────────────────────────────────────
@@ -50,10 +47,8 @@ class DocumentAgent:
         self.chat_history = []
 
     def run(self, user_query: str) -> str:
-        print("______________CHECK HELLO____________",user_query,self.data)
         if not self.data:
             return "⚠️ No document loaded. Please upload a file first."
-        print("DATAAAAAAAAAA",self.chat_history,self.data)
         self.chat_history.append(f"User: {user_query}")
         memory_context = "\n".join(self.chat_history[-6:])
 
@@ -61,9 +56,7 @@ class DocumentAgent:
             result = analyze_csv(self.data["df"], user_query, self.llm)
 
         elif self.data["type"] in ("pdf", "txt"):
-            print("HERE????")
             context = retrieve_context(user_query, self.data["vector_db"])
-            print("---------------------------------CHECK",context)
             result = process_document(context, user_query, self.llm)
 
         else:
