@@ -4,111 +4,111 @@ import streamlit as st
 from core import DocumentAgent
 from loader import load_data
 
-# ── Page config ──────────────────────────────────────────────────────────────
-# st.set_page_config(
-#     page_title="Doc Intelligence Agent",
-#     page_icon="🧠",
-#     layout="wide",
-#     initial_sidebar_state="expanded",
-# )
+#── Page config ──────────────────────────────────────────────────────────────
+st.set_page_config(
+    page_title="Doc Intelligence Agent",
+    page_icon="🧠",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# ── Custom CSS ───────────────────────────────────────────────────────────────
-# st.markdown("""
-# <style>
-#   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap');
+#── Custom CSS ───────────────────────────────────────────────────────────────
+st.markdown("""
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap');
 
-#   html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
-#   h1, h2, h3 { font-family: 'Space Mono', monospace; }
+  html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
+  h1, h2, h3 { font-family: 'Space Mono', monospace; }
 
-#   .stChatMessage { border-radius: 12px; margin-bottom: 8px; }
-#   .badge {
-#     display: inline-block;
-#     padding: 2px 10px;
-#     border-radius: 999px;
-#     font-size: 11px;
-#     font-weight: 600;
-#     letter-spacing: 0.5px;
-#     margin-right: 6px;
-#   }
-#   .badge-pdf  { background: #dbeafe; color: #1e40af; }
-#   .badge-csv  { background: #dcfce7; color: #166534; }
-#   .badge-txt  { background: #fef9c3; color: #854d0e; }
+  .stChatMessage { border-radius: 12px; margin-bottom: 8px; }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+  }
+  .badge-pdf  { background: #dbeafe; color: #1e40af; }
+  .badge-csv  { background: #dcfce7; color: #166534; }
+  .badge-txt  { background: #fef9c3; color: #854d0e; }
 
-#   footer { visibility: hidden; }
-# </style>
-# """, unsafe_allow_html=True)
-
-
-# # ── Session state ─────────────────────────────────────────────────────────────
-# if "agent" not in st.session_state:
-#     st.session_state.agent = DocumentAgent()
-# if "messages" not in st.session_state:
-#     st.session_state.messages = []
-# if "file_loaded" not in st.session_state:
-#     st.session_state.file_loaded = False
-# if "file_info" not in st.session_state:
-#     st.session_state.file_info = {}
+  footer { visibility: hidden; }
+</style>
+""", unsafe_allow_html=True)
 
 
-# # ── Sidebar ──────────────────────────────────────────────────────────────────
-# with st.sidebar:
-#     st.markdown("## 🧠 Doc Intelligence Agent")
-#     st.markdown("*Agentic RAG — upload a doc, ask anything.*")
-#     st.divider()
+# ── Session state ─────────────────────────────────────────────────────────────
+if "agent" not in st.session_state:
+    st.session_state.agent = DocumentAgent()
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "file_loaded" not in st.session_state:
+    st.session_state.file_loaded = False
+if "file_info" not in st.session_state:
+    st.session_state.file_info = {}
 
-#     uploaded_file = st.file_uploader(
-#         "Upload a document",
-#         type=["pdf", "csv", "txt"],
-#         help="Supports PDF, CSV, and plain text files.",
-#     )
 
-#     if uploaded_file:
-#         if st.button("⚡ Process Document", type="primary", use_container_width=True):
-#             with st.spinner("Chunking, embedding, indexing…"):
-#                 suffix = "." + uploaded_file.name.split(".")[-1]
-#                 with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-#                     tmp.write(uploaded_file.read())
-#                     tmp_path = tmp.name
+# ── Sidebar ──────────────────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("## 🧠 Doc Intelligence Agent")
+    st.markdown("*Agentic RAG — upload a doc, ask anything.*")
+    st.divider()
 
-#                 try:
-#                     data = load_data(tmp_path)
-#                     st.session_state.agent.load(data)
-#                     st.session_state.file_loaded = True
-#                     st.session_state.file_info = {
-#                         "name": uploaded_file.name,
-#                         "type": data["type"],
-#                         "chunks": data.get("chunks", "—"),
-#                     }
-#                     st.session_state.messages = []
-#                     st.success("Ready! Start asking questions below.")
-#                 except Exception as e:
-#                     st.error(f"Error: {e}")
-#                 finally:
-#                     os.unlink(tmp_path)
+    uploaded_file = st.file_uploader(
+        "Upload a document",
+        type=["pdf", "csv", "txt"],
+        help="Supports PDF, CSV, and plain text files.",
+    )
 
-#     if st.session_state.file_loaded:
-#         info = st.session_state.file_info
-#         file_type = info["type"].upper()
-#         badge_class = f"badge-{info['type']}"
-#         st.markdown(f"""
-#         **Loaded:** `{info['name']}`  
-#         <span class='badge {badge_class}'>{file_type}</span>
-#         {"Chunks: **" + str(info['chunks']) + "**" if info['chunks'] != "—" else ""}
-#         """, unsafe_allow_html=True)
-#         st.divider()
+    if uploaded_file:
+        if st.button("⚡ Process Document", type="primary", use_container_width=True):
+            with st.spinner("Chunking, embedding, indexing…"):
+                suffix = "." + uploaded_file.name.split(".")[-1]
+                with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                    tmp.write(uploaded_file.read())
+                    tmp_path = tmp.name
 
-#         if st.button("🗑️ Clear Chat", use_container_width=True):
-#             st.session_state.messages = []
-#             st.session_state.agent.chat_history = []
-#             st.rerun()
+                try:
+                    data = load_data(tmp_path)
+                    st.session_state.agent.load(data)
+                    st.session_state.file_loaded = True
+                    st.session_state.file_info = {
+                        "name": uploaded_file.name,
+                        "type": data["type"],
+                        "chunks": data.get("chunks", "—"),
+                    }
+                    st.session_state.messages = []
+                    st.success("Ready! Start asking questions below.")
+                except Exception as e:
+                    st.error(f"Error: {e}")
+                finally:
+                    os.unlink(tmp_path)
 
-#     st.divider()
-#     st.markdown("""
-#     **Stack**  
-#     LangChain · FAISS · HuggingFace · Groq (llama3)
+    if st.session_state.file_loaded:
+        info = st.session_state.file_info
+        file_type = info["type"].upper()
+        badge_class = f"badge-{info['type']}"
+        st.markdown(f"""
+        **Loaded:** `{info['name']}`  
+        <span class='badge {badge_class}'>{file_type}</span>
+        {"Chunks: **" + str(info['chunks']) + "**" if info['chunks'] != "—" else ""}
+        """, unsafe_allow_html=True)
+        st.divider()
 
-#     [GitHub](https://github.com/) · [LinkedIn](https://linkedin.com/)
-#     """)
+        if st.button("🗑️ Clear Chat", use_container_width=True):
+            st.session_state.messages = []
+            st.session_state.agent.chat_history = []
+            st.rerun()
+
+    st.divider()
+    st.markdown("""
+    **Stack**  
+    LangChain · FAISS · HuggingFace · Groq (llama3)
+
+    [GitHub](https://github.com/) · [LinkedIn](https://linkedin.com/)
+    """)
 
 
 # ── Main area ─────────────────────────────────────────────────────────────────
