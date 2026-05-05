@@ -3,7 +3,9 @@ import tempfile
 import streamlit as st
 from loader import load_data
 from core import DocumentAgent
- 
+import logging
+
+logging.getLogger("transformers").setLevel(logging.ERROR)
 
 st.set_page_config(page_title="RAG Document Agent", page_icon="🧠", layout="centered")
 
