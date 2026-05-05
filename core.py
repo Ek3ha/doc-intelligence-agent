@@ -25,14 +25,15 @@ Text:
 
 
 def analyze_csv(df, query: str, llm) -> str:
-    response = llm.invoke(f"""You are a data analyst. Answer the question based strictly on the data.
+#     response = llm.invoke(f"""You are a data analyst. Answer the question based strictly on the data.
 
-Data:
-{df.to_string(max_rows=50)}
+# Data:
+# {df.to_string(max_rows=50)}
 
-Question: {query}
-""")
-    return response.content
+# Question: {query}
+# """)
+#     return response.content
+    return "Hello"
 
 
 # ── Agent ────────────────────────────────────────────────────────────────────

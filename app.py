@@ -79,6 +79,7 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file and not st.session_state.file_loaded:
+    print(uploaded_file)
     with st.spinner("Chunking → Embedding → Storing in FAISS…"):
         suffix = "." + uploaded_file.name.split(".")[-1]
         with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
@@ -86,6 +87,7 @@ if uploaded_file and not st.session_state.file_loaded:
             tmp_path = tmp.name
         try:
             data = load_data(tmp_path)
+            print(data)
             st.session_state.agent.load(data)
             st.session_state.file_loaded = True
             st.session_state.messages = []
