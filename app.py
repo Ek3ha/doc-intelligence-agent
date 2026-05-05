@@ -128,6 +128,7 @@ if st.session_state.file_loaded:
                 #response="HELLO"
                 response = st.session_state.agent.run(prompt)
             st.markdown(response)
+            print("RESPONSE",response)
  
         st.session_state.messages.append({"role": "assistant", "content": response})
  

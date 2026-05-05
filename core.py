@@ -50,6 +50,7 @@ class DocumentAgent:
         self.chat_history = []
 
     def run(self, user_query: str) -> str:
+        print("______________CHECK HELLO____________",user_query,self.data)
         if not self.data:
             return "⚠️ No document loaded. Please upload a file first."
         print("DATAAAAAAAAAA",self.chat_history,self.data)
