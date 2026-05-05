@@ -9,6 +9,7 @@ def get_llm():
 
 # ── Tools ────────────────────────────────────────────────────────────────────
 def retrieve_context(query: str, vector_db, k: int = 3) -> str:
+    print("-----------I AM HERE----------")
     results = vector_db.similarity_search(query, k=k)
     return "\n\n".join([r.page_content for r in results])
 
@@ -60,7 +61,7 @@ class DocumentAgent:
 
         elif self.data["type"] in ("pdf", "txt"):
             context = retrieve_context(user_query, self.data["vector_db"])
-            print("---------------------------------CONTEXT",context)
+            print("---------------------------------CHECK",context)
             result = process_document(context, user_query, self.llm)
 
         else:
