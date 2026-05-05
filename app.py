@@ -122,7 +122,9 @@ if st.session_state.file_loaded:
  
         with st.chat_message("assistant"):
             with st.spinner("Retrieving context and generating answer…"):
-                response = st.session_state.agent.run(prompt)
+                print("---------HELLO-------------")
+                response="HELLO"
+                #response = st.session_state.agent.run(prompt)
             st.markdown(response)
  
         st.session_state.messages.append({"role": "assistant", "content": response})
