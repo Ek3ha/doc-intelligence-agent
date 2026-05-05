@@ -14,14 +14,15 @@ def retrieve_context(query: str, vector_db, k: int = 3) -> str:
 
 
 def process_document(text: str, task: str, llm) -> str:
-    response = llm.invoke(f"""Perform the following task on the given text.
+    return "HI"
+#     response = llm.invoke(f"""Perform the following task on the given text.
 
-Task: {task}
+# Task: {task}
 
-Text:
-{text}
-""")
-    return response.content
+# Text:
+# {text}
+# """)
+#     return response.content
 
 
 def analyze_csv(df, query: str, llm) -> str:
@@ -59,6 +60,7 @@ class DocumentAgent:
 
         elif self.data["type"] in ("pdf", "txt"):
             context = retrieve_context(user_query, self.data["vector_db"])
+            print("---------------------------------CONTEXT",context)
             result = process_document(context, user_query, self.llm)
 
         else:
