@@ -79,6 +79,7 @@ https://ollama.com
 
 ```bash
 ollama pull llama3
+```
 
 ### Run the project
 streamlit run app.py

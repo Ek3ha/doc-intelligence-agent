@@ -13,26 +13,35 @@ def retrieve_context(query: str, vector_db, k: int = 3) -> str:
     return "\n\n".join([r.page_content for r in results])
 
 
-def process_document(text: str, task: str, llm) -> str:
-    response = llm.invoke(f"""Perform the following task on the given text.
-
-Task: {task}
-
-Text:
-{text}
-""")
+def process_document(text: str, task: str, llm,memory_context:str) -> str:
+    response = llm.invoke(f"""You are a helpful assistant answering questions about a document.
+        
+                            Conversation so far:
+                            {memory_context}
+                            
+                            Use the context below to answer the question. If the answer is not in the context, say so.
+                            
+                            Context:
+                            {text}
+                            
+                            Question: {task}
+                            """)
     return response.content
 
 
-def analyze_csv(df, query: str, llm) -> str:
+def analyze_csv(df, query: str, llm, memory_context: str) -> str:
     response = llm.invoke(f"""You are a data analyst. Answer the question based strictly on the data.
-
-Data:
-{df.to_string(max_rows=50)}
-
-Question: {query}
-""")
+ 
+                            Conversation so far:
+                            {memory_context}
+                            
+                            Data:
+                            {df}
+                            
+                            Question: {query}
+                            """)
     return response.content
+ 
 
 
 # ── Agent ────────────────────────────────────────────────────────────────────
@@ -53,14 +62,18 @@ class DocumentAgent:
         memory_context = "\n".join(self.chat_history[-6:])
 
         if self.data["type"] == "csv":
-            result = analyze_csv(self.data["df"], user_query, self.llm)
+            result = analyze_csv(self.data["df"], user_query, self.llm,memory_context)
 
         elif self.data["type"] in ("pdf", "txt"):
             context = retrieve_context(user_query, self.data["vector_db"])
-            result = process_document(context, user_query, self.llm)
+            result = process_document(context, user_query, self.llm,memory_context)
 
         else:
-            result = self.llm.invoke(user_query).content
+            result = self.llm.invoke(f"""Conversation so far:
+                                        {memory_context}
+ 
+                                        Question: {user_query}
+                                        """).content
 
         self.chat_history.append(f"Agent: {result}")
         return result
