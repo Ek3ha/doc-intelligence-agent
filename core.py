@@ -52,7 +52,7 @@ class DocumentAgent:
     def run(self, user_query: str) -> str:
         if not self.data:
             return "⚠️ No document loaded. Please upload a file first."
-
+        print("DATAAAAAAAAAA",self.chat_history,self.data)
         self.chat_history.append(f"User: {user_query}")
         memory_context = "\n".join(self.chat_history[-6:])
 
@@ -60,6 +60,7 @@ class DocumentAgent:
             result = analyze_csv(self.data["df"], user_query, self.llm)
 
         elif self.data["type"] in ("pdf", "txt"):
+            print("HERE????")
             context = retrieve_context(user_query, self.data["vector_db"])
             print("---------------------------------CHECK",context)
             result = process_document(context, user_query, self.llm)
