@@ -13,14 +13,19 @@ This project builds a step-by-step agentic AI system that can:
 
 ## 🚀 Features
 
-- 📄 PDF ingestion
-- ✂️ Intelligent chunking
-- 🧠 Embeddings + Vector Search (FAISS)
-- 🤖 Agent with decision-making
-- 💬 Conversation memory
-- 🔧 Modular tool-based architecture
-
+| Feature | Details |
+|---|---|
+| **Multi-format ingestion** | PDF · CSV · TXT |
+| **Intelligent chunking** | Recursive character splitter with configurable overlap |
+| **Semantic search** | FAISS + HuggingFace embeddings |
+| **Agentic routing** | Agent selects RAG or direct CSV analysis based on file type & query |
+| **Conversation memory** | Sliding window of last 6 turns passed as context (3 chats)|
+| **Dual LLM support** | Groq (cloud, free) or Ollama (local) — env-var controlled |
+| **Web UI** | Streamlit chat interface with file upload |
+| **Docker ready** | Single-command deploy |
+ 
 ---
+
 
 ## 🧠 Architecture
 
@@ -49,7 +54,7 @@ FAISS Vector   DataFrame
     │             │
     └──────┬──────┘
            ▼
-    LLM (Ollama)
+    LLM (GROQ / Ollama (Local))
            │
            ▼
       Final Answer
@@ -62,7 +67,7 @@ Agentic RAG pipeline — upload any PDF, CSV, or text file and interrogate it wi
 
 ## 🛠️ Setup
 
-### 1. Install dependencies
+### 1. Clone & install dependencies
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/doc-intelligence-agent.git
@@ -101,7 +106,3 @@ docker compose up --build
 ```
  
 ---
-
-## 📄 License
- 
-MIT © 2025
