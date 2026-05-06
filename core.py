@@ -81,7 +81,7 @@ class DocumentAgent:
         if not self.data:
             return {"answer": "⚠️ No document loaded.", "chunks": []}
         self.chat_history.append(f"User: {user_query}")
-        memory_context = "\n".join(self.chat_history)
+        memory_context = "\n".join(self.chat_history[-6:])
 
         if self.data["type"] == "csv":
             result = analyze_csv(self.data["df"], user_query, self.llm,memory_context)

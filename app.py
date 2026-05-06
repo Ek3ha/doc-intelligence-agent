@@ -168,7 +168,7 @@ st.markdown("""
 This is a live demo of an **Agentic RAG pipeline** — a system where an AI agent reads your document,
 understands it using semantic search, and answers your questions with context-aware reasoning.
 
-Built with **LangChain**, **FAISS vector search**, **HuggingFace embeddings**, and **Groq (llama-3.1)**.
+Built with **LangChain**, **FAISS vector search**, **HuggingFace embeddings**, and **Groq/ Ollama**.
 """)
 
 st.divider()
