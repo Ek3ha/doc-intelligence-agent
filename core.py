@@ -1,11 +1,32 @@
 import os
 from typing import Optional
+import streamlit as st
+
+# GET API KEY
+def get_api_key():
+    # Streamlit Cloud
+    if "GROQ_API_KEY" in st.secrets:
+        return st.secrets["GROQ_API_KEY"]
+    # Local .env
+    return os.getenv("GROQ_API_KEY")
 
 # ── LLM factory ─────────────────────────────────────────────────────────────
+# def get_llm():
+#     from langchain_community.chat_models import ChatOllama
+#     return ChatOllama(model=os.getenv("OLLAMA_MODEL", "llama3"))
 def get_llm():
+    """Return the appropriate LLM based on available env vars."""
+    groq_key=get_api_key()
+    if groq_key:
+        from langchain_groq import ChatGroq
+        return ChatGroq(
+            model="llama3-8b-8192",
+            api_key=groq_key,
+            temperature=0.2,
+        )
+    # Fallback to local Ollama
     from langchain_community.chat_models import ChatOllama
     return ChatOllama(model=os.getenv("OLLAMA_MODEL", "llama3"))
-
 
 # ── Tools ────────────────────────────────────────────────────────────────────
 def retrieve_context(query: str, vector_db, k: int = 3) -> str:
