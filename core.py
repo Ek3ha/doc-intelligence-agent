@@ -29,7 +29,7 @@ def get_llm():
     return ChatOllama(model=os.getenv("OLLAMA_MODEL", "llama3"))
 
 # ── Tools ────────────────────────────────────────────────────────────────────
-def retrieve_context(query: str, vector_db, k: int = 3) -> str:
+def retrieve_context(query: str, vector_db, k: int = 5) -> str:
     results = vector_db.similarity_search(query, k=k)
     context = "\n\n".join([r.page_content for r in results])
     return context, results
