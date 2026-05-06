@@ -32,7 +32,7 @@ def load_txt(file_path: str):
     return loader.load()
 
 
-def chunk_documents(documents, chunk_size=2000, chunk_overlap=500):
+def chunk_documents(documents, chunk_size=1000, chunk_overlap=300):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
