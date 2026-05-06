@@ -31,7 +31,8 @@ def get_llm():
 # ── Tools ────────────────────────────────────────────────────────────────────
 def retrieve_context(query: str, vector_db, k: int = 3) -> str:
     results = vector_db.similarity_search(query, k=k)
-    return "\n\n".join([r.page_content for r in results])
+    context = "\n\n".join([r.page_content for r in results])
+    return context, results
 
 
 def process_document(text: str, task: str, llm,memory_context:str) -> str:

@@ -251,9 +251,8 @@ if st.session_state.file_loaded:
             with st.spinner("Retrieving context and generating answer…"):
                 result = st.session_state.agent.run(prompt)
             
-            answer = result["answer"]
-            chunks = result["chunks"]
-
+            answer = result.get("answer", "") if isinstance(result, dict) else result
+            chunks = result.get("chunks", []) if isinstance(result, dict) else []
             st.markdown(answer)
 
             # show chunks in expander
