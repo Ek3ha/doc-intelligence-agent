@@ -59,7 +59,7 @@ def analyze_csv(df, query: str, llm, memory_context: str) -> str:
                             {memory_context}
                             
                             Data:
-                            {df.to_string()}
+                            {df.to_string(max_rows=50)}
                             
                             Question: {query}
                             """)
