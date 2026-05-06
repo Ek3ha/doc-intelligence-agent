@@ -32,7 +32,7 @@ def load_txt(file_path: str):
     return loader.load()
 
 
-def chunk_documents(documents, chunk_size=1000, chunk_overlap=300):
+def chunk_documents(documents, chunk_size=1000, chunk_overlap=200):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
@@ -42,7 +42,7 @@ def chunk_documents(documents, chunk_size=1000, chunk_overlap=300):
 
 def create_vector_db(chunks):
     embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="multi-qa-MiniLM-L6-cos-v1"
     )
     return FAISS.from_documents(chunks, embeddings)
 

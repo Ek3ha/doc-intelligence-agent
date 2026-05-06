@@ -23,7 +23,7 @@ def get_llm():
             model="llama-3.3-70b-versatile",
             #model="llama-3.1-8b-instant",
             api_key=groq_key,
-            temperature=0.2,
+            temperature=0.4,
         )
     # Fallback to local Ollama
     from langchain_community.chat_models import ChatOllama
@@ -31,7 +31,7 @@ def get_llm():
 
 # ── Tools ────────────────────────────────────────────────────────────────────
 def retrieve_context(query: str, vector_db, k: int = 5) -> str:
-    results = vector_db.max_marginal_relevance_search(query, k=k,fetch_k=15)
+    results = vector_db.similarity_search(query, k=k)
     context = "\n\n".join([r.page_content for r in results])
     return context, results
 
