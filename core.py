@@ -57,7 +57,7 @@ def analyze_csv(df, query: str, llm, memory_context: str) -> str:
                             {memory_context}
                             
                             Data:
-                            {df}
+                            {df.tostring()}
                             
                             Question: {query}
                             """)
@@ -78,12 +78,13 @@ class DocumentAgent:
 
     def run(self, user_query: str) -> str:
         if not self.data:
-            return "⚠️ No document loaded. Please upload a file first."
+            return {"answer": "⚠️ No document loaded.", "chunks": []}
         self.chat_history.append(f"User: {user_query}")
-        memory_context = "\n".join(self.chat_history[-6:])
+        memory_context = "\n".join(self.chat_history)
 
         if self.data["type"] == "csv":
             result = analyze_csv(self.data["df"], user_query, self.llm,memory_context)
+            chunks = []
 
         elif self.data["type"] in ("pdf", "txt"):
             context = retrieve_context(user_query, self.data["vector_db"])
@@ -95,6 +96,7 @@ class DocumentAgent:
  
                                         Question: {user_query}
                                         """).content
+            chunks = []
 
         self.chat_history.append(f"Agent: {result}")
-        return result
+        return {"answer": result, "chunks": chunks}

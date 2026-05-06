@@ -71,14 +71,21 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -r requirements.txt
 ```
 
-
-### 2. Install and run Ollama
-
-Download from:
-https://ollama.com
-
+### 2. Configure your LLM
+ 
+**Option A — Groq (opensource-free)**
 ```bash
+# Add your key from https://console.groq.com
+#Add your key to streamlit secrets or
+#Add it to a `.env` file:
+GROQ_API_KEY=your_key_here
+```
+ 
+**Option B — Local Ollama**
+```bash
+# Install Ollama: https://ollama.com
 ollama pull llama3
+# Leave GROQ_API_KEY blank in .env or in streamlit secrets
 ```
 
 ### Run the project
