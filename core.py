@@ -88,7 +88,7 @@ class DocumentAgent:
             chunks = []
 
         elif self.data["type"] in ("pdf", "txt"):
-            context = retrieve_context(user_query, self.data["vector_db"])
+            context,chunks = retrieve_context(user_query, self.data["vector_db"])
             result = process_document(context, user_query, self.llm,memory_context)
 
         else:
